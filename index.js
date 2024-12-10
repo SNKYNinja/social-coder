@@ -1,6 +1,7 @@
 import * as p from "@clack/prompts";
 import color from "picocolors";
 import clipboardy from "clipboardy";
+import { setTimeout } from "timers/promises";
 
 let currentDay = 1;
 
@@ -17,7 +18,11 @@ async function setDay() {
         },
     });
     currentDay = day;
-    p.note(`Day set to ${currentDay}`, color.green("➜"));
+    const s = p.spinner();
+    s.start("Updating day...");
+    await setTimeout(1000);
+    s.stop("Day updated successfully!");
+    p.note(`Challenge Day: ${color.bold(color.yellow(currentDay))}`, color.green("➜"));
 }
 
 async function addQuestion() {
@@ -47,7 +52,11 @@ async function addQuestion() {
         }
     });
 
-    p.note("Question added!", color.green("➜"));
+    const s = p.spinner();
+    s.start("Adding question...");
+    await setTimeout(1000);
+    s.stop("Question added successfully!");
+    p.note(`New question: ${color.bold(title)}`, color.green("➜"));
     return new Question(title, platform, insight);
 }
 
@@ -61,7 +70,7 @@ class Question {
 
 function generateTemplate(questions, socialPlatform) {
     questions = questions.map((q, i) => 
-        `📚 Problem ${questions.length > 1 ? ` ${i + 1}` : ''}: ${q.title}\n🌐 Platform: ${q.platform}\n🌟 Key Insight: ${q.insight}`
+        `📚 Problem ${questions.length > 1 && `${i + 1}`}: ${q.title}\n🌐 Platform: ${q.platform}\n🌟 Key Insight: ${q.insight}`
     );
     const templates = {
         LinkedIn: `🚀 Day ${currentDay}/100 – #DrGViswanathan Coding Challenge ✅\n\n${questions.join(`\n`)}\n\n💻 #TeamSentinels #100DaysOfCode #DrGViswanathan #VITBhopal #VITBhopalLion #LeetCode`,
@@ -72,7 +81,11 @@ function generateTemplate(questions, socialPlatform) {
 }
 
 async function main() {
-    p.intro(`${color.bgMagenta(color.black("Welcome to Social Coder!"))}`);
+    console.clear();
+    
+    const title = color.bold(color.cyan(`\n  ${color.underline("🚀 Welcome to Social Coder!")} 🖥️  `));
+    
+    p.intro(title);
 
     const questions = [];
 
@@ -80,8 +93,8 @@ async function main() {
         const action = await p.select({
             message: "What would you like to do?",
             options: [
-                { value: "add", label: `Add Question (${questions.length})` },
-                { value: "set-day", label: `Coding Challenge Day (${currentDay})` },
+                { value: "add", label: `Add Question ${color.dim(`(${questions.length})`)}` },
+                { value: "set-day", label: `Set Coding Challenge Day ${color.dim(`(${currentDay})`)}` },
                 { value: "generate", label: "Generate Post" },
                 { value: "exit", label: "Exit" },
             ]
@@ -96,10 +109,10 @@ async function main() {
             await setDay();
         } else if (action === "generate") {
             if (questions.length === 0) {
-                p.note("No questions added yet!", "warning");
+                p.note("No questions added yet!", `${color.yellow('⚠️ WARNING')}`);
                 continue;
             }
-
+        
             let selectedQuestion = await p.multiselect({
                 message: "Choose a question to generate a post for:",
                 options: questions.map((q, index) => ({
@@ -107,7 +120,7 @@ async function main() {
                     label: q.title,
                 })),
             });
-
+        
             const socialPlatform = await p.select({
                 message: "Choose the social media platform:",
                 options: [
@@ -115,17 +128,42 @@ async function main() {
                     { value: "Twitter", label: "Twitter" },
                 ],
             });
-
+        
             selectedQuestion = questions.filter((_, i) => selectedQuestion.includes(i));
             const template = generateTemplate(selectedQuestion, socialPlatform);
-            clipboardy.writeSync(template);
-            p.note("Template copied to clipboard!", color.green("➜"));
+        
+            while (true) {
+                const previewOrCopy = await p.select({
+                    message: "What would you like to do?",
+                    options: [
+                        { value: "preview", label: "Preview the template" },
+                        { value: "copy", label: "Copy template to clipboard" },
+                        { value: "back", label: "Back to main menu" },
+                    ],
+                });
+        
+                if (previewOrCopy === "preview") {
+                    p.note(template, "Preview of your post:");
+                } else if (previewOrCopy === "copy") {
+                    clipboardy.writeSync(template);
+        
+                    const s = p.spinner();
+                    s.start("Generating post...");
+                    await setTimeout(1500);
+                    s.stop("Post generated and copied to clipboard!");
+                } else if (previewOrCopy === "back") {
+                    break;
+                }
+            }
         } else if (action === "exit") {
             break;
         }
     }
 
-    p.outro(`${color.bgMagenta(color.black("See you tomorrow!"))}`);
+    const goodbyeMessage = color.bold(color.cyan(`👋 ${color.underline("See you tomorrow!")}`));
+    
+    p.outro(goodbyeMessage);
 }
 
-main();
+main().catch(console.error);
+
