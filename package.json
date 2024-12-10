@@ -1,16 +1,23 @@
 {
   "name": "social-coder",
   "version": "1.0.0",
+  "description": "A CLI tool for generating social media posts for coding challenges",
   "main": "index.js",
+  "bin": {
+    "social-coder": "./index.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
   },
   "type": "module",
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "keywords": [
+    "CLI",
+    "coding-challenges",
+    "social-media"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
   "dependencies": {
     "@clack/prompts": "^0.8.2",
     "clipboardy": "^4.0.0",
