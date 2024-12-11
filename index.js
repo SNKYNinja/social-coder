@@ -72,11 +72,11 @@ class Question {
 
 function generateTemplate(questions, socialPlatform) {
     questions = questions.map((q, i) => 
-        `📚 Problem ${questions.length > 1 && `${i + 1}`}: ${q.title}\n🌐 Platform: ${q.platform}\n🌟 Key Insight: ${q.insight}`
+        `📚 Problem ${questions.length > 1 ? `${i + 1}`: ""}: ${q.title}\n🌐 Platform: ${q.platform}\n🌟 Key Insight: ${q.insight}`
     );
     const templates = {
-        LinkedIn: `🚀 Day ${currentDay}/100 – #DrGViswanathan Coding Challenge ✅\n\n${questions.join(`\n`)}\n\n💻 #TeamSentinels #100DaysOfCode #DrGViswanathan #VITBhopal #VITBhopalLion #LeetCode`,
-        Twitter: `🚀 Day ${currentDay} – LeetCode Grind – Coding Challenge ✅\n\n${questions.join(`\n`)}\n\n💻 #100DaysOfCode #LeetCode #JobHunt #CodingJourney #DevLife`
+        LinkedIn: `🚀 Day ${currentDay}/100 – #DrGViswanathan Coding Challenge ✅\n\n${questions.join(`\n\n`)}\n\n💻 #TeamSentinels #100DaysOfCode #DrGViswanathan #VITBhopal #VITBhopalLion #LeetCode`,
+        Twitter: `🚀 Day ${currentDay} – LeetCode Grind – Coding Challenge ✅\n\n${questions.join(`\n\n`)}\n\n💻 #100DaysOfCode #LeetCode #JobHunt #CodingJourney #DevLife`
     };
 
     return templates[socialPlatform];
