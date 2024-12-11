@@ -22,5 +22,13 @@
     "@clack/prompts": "^0.8.2",
     "clipboardy": "^4.0.0",
     "picocolors": "^1.1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SNKYNinja/Social-Coder.git"
+  },
+  "homepage": "https://github.com/SNKYNinja/Social-Coder#readme",
+  "bugs": {
+    "url": "https://github.com/SNKYNinja/Social-Coder/issues"
   }
 }
