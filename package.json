@@ -1,6 +1,6 @@
 {
   "name": "social-coder",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A CLI tool for generating social media posts for coding challenges",
   "main": "index.js",
   "bin": {
