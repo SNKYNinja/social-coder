@@ -72,7 +72,7 @@ class Question {
 
 function generateTemplate(questions, socialPlatform) {
     questions = questions.map((q, i) => 
-        `📚 Problem ${questions.length > 1 ? `${i + 1}`: ""}: ${q.title}\n🌐 Platform: ${q.platform}\n🌟 Key Insight: ${q.insight}`
+        `📚 Problem${questions.length > 1 ? ` ${i + 1}`: ""}: ${q.title}\n🌐 Platform: ${q.platform}\n🌟 Key Insight: ${q.insight}`
     );
     const templates = {
         LinkedIn: `🚀 Day ${currentDay}/100 – #DrGViswanathan Coding Challenge ✅\n\n${questions.join(`\n\n`)}\n\n💻 #TeamSentinels #100DaysOfCode #DrGViswanathan #VITBhopal #VITBhopalLion #LeetCode`,
