@@ -1,0 +1,37 @@
+{
+    "name": "social-coder",
+    "version": "2.0.0",
+    "description": "A lightweight CLI tool for generating daily coding challenge posts",
+    "main": "index.js",
+    "type": "module",
+    "bin": {
+        "social-coder": "src/index.js"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/SNKYNinja/social-coder.git"
+    },
+    "keywords": [
+        "cli"
+    ],
+    "author": "Aditya",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/SNKYNinja/social-coder/issues"
+    },
+    "homepage": "https://github.com/SNKYNinja/social-coder#readme",
+    "dependencies": {
+        "@clack/prompts": "^0.9.1",
+        "chalk": "^5.4.1",
+        "clipboardy": "^4.0.0",
+        "conf": "^13.1.0",
+        "picocolors": "^1.1.1"
+    },
+    "devDependencies": {
+        "@types/node": "^22.10.10",
+        "typescript": "^5.7.3"
+    }
+}
