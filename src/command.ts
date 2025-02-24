@@ -1,6 +1,6 @@
 import { text, select, note } from "@clack/prompts"
 import clipboardy from "clipboardy"
-import TemplateManager from "../utils/templateManager.js"
+import TemplateManager from "./utils/templateManager.js"
 
 const platformOptions = [
     { value: "LeetCode", label: "LeetCode" },

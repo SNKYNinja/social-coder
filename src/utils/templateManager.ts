@@ -67,8 +67,6 @@ export default class TemplateManager {
             throw new Error(`Template ${templateName} not found.`)
         }
 
-        const stuff = content.replace(/\{(\w+)\}/g, (_, key) => data[key]?.toString() || `{${key}}`).trim()
-        console.log(stuff)
-        return stuff
+        return content.replace(/\{(\w+)\}/g, (_, key) => data[key]?.toString() || `{${key}}`).trim()
     }
 }
