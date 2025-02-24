@@ -2,7 +2,11 @@ import fs from "fs"
 import path from "path"
 import os from "os"
 
-const CONFIG_DIR = path.join(os.homedir(), ".config", "social-coder")
+const CONFIG_DIR =
+    process.platform === "win32"
+        ? path.join(process.env.APPDATA || path.join(os.homedir(), "AppData", "Roaming"), "social-coder")
+        : path.join(os.homedir(), ".config", "social-coder")
+
 const TEMPLATES_DIR = path.join(CONFIG_DIR, "templates")
 const CONFIG_FILE = path.join(CONFIG_DIR, "config.json")
 
@@ -27,26 +31,30 @@ export default class TemplateManager {
         return JSON.parse(fs.readFileSync(CONFIG_FILE, "utf-8"))
     }
 
-    private saveConfig(config: Config): void {
+    private saveConfig(config: Config) {
         fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 4), "utf-8")
     }
 
-    getAvailableTemplates(): string[] {
+    getAvailableTemplates() {
         return fs
             .readdirSync(TEMPLATES_DIR)
             .filter((file) => file.endsWith(".txt"))
             .map((file) => path.basename(file, ".txt"))
     }
 
-    getTemplateContent(templateName: string): string | null {
+    getTemplateContent(templateName: string) {
         const templatePath = path.join(TEMPLATES_DIR, `${templateName}.txt`)
         if (fs.existsSync(templatePath)) {
             return fs.readFileSync(templatePath, "utf-8")
         }
-        return null
+        return ""
     }
 
-    setStartingDay(day: number): void {
+    getTemplatesDir() {
+        return TEMPLATES_DIR
+    }
+
+    setStartingDay(day: number) {
         if (isNaN(day) || day < 1) {
             throw new Error("Invalid day. Please enter a valid positive number.")
         }
@@ -55,13 +63,13 @@ export default class TemplateManager {
         this.saveConfig(newConfig)
     }
 
-    getCurrentDay(): number {
+    getCurrentDay() {
         const config = this.loadConfig()
         const diffDays = Math.floor((Date.now() - config.startTimestamp) / (1000 * 60 * 60 * 24))
         return config.startDay + diffDays
     }
 
-    fillTemplate(templateName: string, data: Record<string, string | number>): string {
+    fillTemplate(templateName: string, data: Record<string, string | number>) {
         const content = this.getTemplateContent(templateName)
         if (!content) {
             throw new Error(`Template ${templateName} not found.`)

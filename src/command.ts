@@ -1,6 +1,8 @@
 import { text, select, note } from "@clack/prompts"
 import clipboardy from "clipboardy"
 import TemplateManager from "./utils/templateManager.js"
+import { exec } from "child_process"
+import path from "path"
 
 const platformOptions = [
     { value: "LeetCode", label: "LeetCode" },
@@ -24,9 +26,9 @@ export async function createPost(templateManager: TemplateManager) {
         })
     )
 
-    const problemName = String(await text({ message: "Problem Title:", placeholder: "Two Sum" }))
+    const problemName = String(await text({ message: "Problem Title:" }))
     const platform = String(await select({ message: "Platform:", options: platformOptions }))
-    const insight = String(await text({ message: "Enter Insights:", placeholder: "Key learning points" }))
+    const insight = String(await text({ message: "Enter Insights:" }))
 
     const day = templateManager.getCurrentDay()
     const filledTemplate = templateManager.fillTemplate(templateName, {
@@ -43,27 +45,40 @@ export async function createPost(templateManager: TemplateManager) {
 export async function manageTemplates(templateManager: TemplateManager) {
     const templates = templateManager.getAvailableTemplates()
     if (templates.length === 0) {
-        console.log("No templates found. Add templates in ~/.config/social-coder/templates.")
+        console.log("No templates found!")
         return
     }
 
-    const selectedTemplate = String(
-        await select({
-            message: "Select a template to preview:",
-            options: templates.map((name) => ({ value: name, label: name })),
-        })
-    )
+    const action = await select({
+        message: "What do you want to do?",
+        options: [
+            { value: "preview", label: "Preview template" },
+            { value: "open", label: "Open templates folder" },
+        ],
+    })
 
-    const templateContent = templateManager.getTemplateContent(selectedTemplate)
-    console.log("\nTemplate Content:")
-    console.log(templateContent)
+    if (action === "preview") {
+        const selectedTemplate = String(
+            await select({
+                message: "Select a template to preview:",
+                options: templates.map((name) => ({ value: name, label: name })),
+            })
+        )
+
+        const templateContent = templateManager.getTemplateContent(selectedTemplate)
+        note(templateContent, "Template Content:")
+    } else if (action === "open") {
+        const templatesDir = templateManager.getTemplatesDir()
+        const openCommand = process.platform === "win32" ? "start" : process.platform === "darwin" ? "open" : "xdg-open"
+        exec(`${openCommand} "${templatesDir}"`)
+    }
 }
 
 export async function setStartingDay(templateManager: TemplateManager) {
     const customDay = await text({ message: "Enter starting day:", placeholder: "1" })
     if (customDay && !isNaN(Number(customDay))) {
         templateManager.setStartingDay(Number(customDay))
-        console.log("Starting day set successfully!")
+        note("Starting day set successfully!")
     } else {
         console.error("Invalid input. Please enter a valid number.")
     }
