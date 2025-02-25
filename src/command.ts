@@ -68,7 +68,8 @@ export async function manageTemplates(templateManager: TemplateManager) {
         note(templateContent, "Template Content:")
     } else if (action === "open") {
         const templatesDir = templateManager.getTemplatesDir()
-        const openCommand = process.platform === "win32" ? "start" : process.platform === "darwin" ? "open" : "xdg-open"
+        const openCommand =
+            process.platform === "win32" ? "explorer" : process.platform === "darwin" ? "open" : "xdg-open"
         exec(`${openCommand} "${templatesDir}"`)
     }
 }
