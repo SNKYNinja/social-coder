@@ -43,12 +43,6 @@ export async function createPost(templateManager: TemplateManager) {
 }
 
 export async function manageTemplates(templateManager: TemplateManager) {
-    const templates = templateManager.getAvailableTemplates()
-    if (templates.length === 0) {
-        console.log("No templates found!")
-        return
-    }
-
     const action = await select({
         message: "What do you want to do?",
         options: [
@@ -58,6 +52,11 @@ export async function manageTemplates(templateManager: TemplateManager) {
     })
 
     if (action === "preview") {
+        const templates = templateManager.getAvailableTemplates()
+        if (templates.length === 0) {
+            console.log("No templates found!")
+            return
+        }
         const selectedTemplate = String(
             await select({
                 message: "Select a template to preview:",
