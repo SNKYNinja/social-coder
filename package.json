@@ -1,6 +1,6 @@
 {
     "name": "social-coder",
-    "version": "2.0.7",
+    "version": "2.0.8",
     "description": "A lightweight CLI tool for generating daily coding challenge posts",
     "main": "index.js",
     "type": "module",
