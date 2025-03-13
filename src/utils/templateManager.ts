@@ -65,8 +65,16 @@ export default class TemplateManager {
 
     getCurrentDay() {
         const config = this.loadConfig()
-        const diffDays = (Date.now() - config.startTimestamp) / (1000 * 60 * 60 * 24) // 1 day
-        return Math.round(config.startDay + diffDays)
+
+        const startDate = new Date(config.startTimestamp)
+        const currentDate = new Date()
+
+        startDate.setHours(0, 0, 0, 0)
+        currentDate.setHours(0, 0, 0, 0)
+
+        const diffDays = Math.floor((currentDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24))
+
+        return config.startDay + diffDays
     }
 
     fillTemplate(templateName: string, data: Record<string, string | number>) {
